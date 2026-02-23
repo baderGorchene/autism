@@ -1,65 +1,140 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState } from "react";
+import { FIELDS } from "./fields";
+
+// 🔥 Update this to your current ngrok URL (no trailing slash)
+const API_BASE = "https://xxxx.ngrok-free.dev";
 
 export default function Home() {
+  const [output, setOutput] = useState("Submission preview will appear here…");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const payload: Record<string, any> = {};
+
+    let isValid = true;
+    for (const f of FIELDS) {
+      const val = formData.get(f.id);
+
+      if (!val || val === "") {
+        payload[f.question] = null;
+        continue;
+      }
+
+      const numVal = Number(val);
+
+      if (f.type === "number") {
+        if (isNaN(numVal) || (f.min !== undefined && numVal < f.min) || (f.max !== undefined && numVal > f.max)) {
+          alert(`Value out of range for: ${f.question}\nExpected ${f.min}–${f.max}`);
+          const el = document.getElementById(f.id);
+          el?.focus();
+          isValid = false;
+          break;
+        }
+      }
+
+      payload[f.question] = numVal;
+    }
+
+    if (!isValid) return;
+
+    setOutput("Submitting to model…");
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch(`${API_BASE}/predict`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ features: payload }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`API error ${res.status}: ${text}`);
+      }
+
+      const result = await res.json();
+
+      setOutput(
+        `✅ MODEL RESPONSE\n\n` +
+        `Recommendation (0/1): ${result.Recommendation}\n` +
+        `vote_count (0..3): ${result.vote_count}\n` +
+        `votes: ${JSON.stringify(result.votes)}\n\n` +
+        `Sent features (JSON):\n\n` +
+        JSON.stringify(payload, null, 2)
+      );
+    } catch (err: any) {
+      setOutput(
+        `❌ ERROR calling model API\n\n${err.message}\n\n` +
+        `Troubleshooting:\n` +
+        `- Confirm Colab server is running\n` +
+        `- Confirm API_BASE matches the latest ngrok URL\n` +
+        `- Confirm CORS is enabled on the FastAPI server`
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClear = () => {
+    const form = document.getElementById("intakeForm") as HTMLFormElement;
+    form.reset();
+    setOutput("Submission preview will appear here…");
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="wrap">
+      <header>
+        <h1>Autism Screening Intake (Prototype)</h1>
+        <p className="sub">Two-column form generated from your training template. This page collects inputs and shows a JSON preview on submit.</p>
+      </header>
+
+      <form id="intakeForm" onSubmit={handleSubmit}>
+        {FIELDS.map((f) => (
+          <div className="row" key={f.id}>
+            <div className="q">{f.question}</div>
+            <div className="a">
+              {f.type === "select" ? (
+                <select id={f.id} name={f.id} required defaultValue="">
+                  <option value="" disabled>Select…</option>
+                  {f.options?.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  id={f.id}
+                  name={f.id}
+                  type="number"
+                  min={f.min}
+                  max={f.max}
+                  step="1"
+                  required
+                />
+              )}
+              <div className="hint">{f.hint}</div>
+            </div>
+          </div>
+        ))}
+
+        <div className="actions">
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
+          <button type="button" id="clearBtn" onClick={handleClear}>
+            Clear
+          </button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </form>
+
+      <div className="out" id="output">
+        {output}
+      </div>
     </div>
   );
 }
