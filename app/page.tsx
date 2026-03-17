@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { FIELDS } from "./fields";
 
 // 🔥 Update this to your current ngrok URL (no trailing slash)
-const API_BASE = "https://xxxx.ngrok-free.dev";
+// 🔥 Updated to local FastAPI backend
+const API_BASE = "http://localhost:8001";
 
 export default function Home() {
   const [output, setOutput] = useState("Submission preview will appear here…");
@@ -70,8 +71,8 @@ export default function Home() {
       setOutput(
         `❌ ERROR calling model API\n\n${err.message}\n\n` +
         `Troubleshooting:\n` +
-        `- Confirm Colab server is running\n` +
-        `- Confirm API_BASE matches the latest ngrok URL\n` +
+        `- Confirm the Python backend is running (uv run python server.py)\n` +
+        `- Confirm API_BASE matches http://localhost:8001\n` +
         `- Confirm CORS is enabled on the FastAPI server`
       );
     } finally {
