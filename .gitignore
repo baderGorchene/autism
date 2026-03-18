@@ -10,8 +10,7 @@ wheels/
 .venv
 *.ipynb
 *.csv
-*.joblib
-*.pkl
+
 
 # next js
 .next
