@@ -13,7 +13,7 @@ services:
       # Exclude the generated model files from host volume mapping if you want them isolated,
       # but leaving them mapped helps if you want to inspect them later.
     command: >
-      bash -c "uv run python train_cpu_model.py && uv run python server.py"
+      bash -c "uv run python server.py"
 
   frontend:
     build:
