@@ -14,7 +14,7 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const payload: Record<string, any> = {};
+    const payload: Record<string, unknown> = {};
 
     let isValid = true;
     for (const f of FIELDS) {
@@ -67,9 +67,10 @@ export default function Home() {
         `Sent features (JSON):\n\n` +
         JSON.stringify(payload, null, 2)
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
       setOutput(
-        `❌ ERROR calling model API\n\n${err.message}\n\n` +
+        `❌ ERROR calling model API\n\n${errorMessage}\n\n` +
         `Troubleshooting:\n` +
         `- Confirm the Python backend is running (uv run python server.py)\n` +
         `- Confirm API_BASE matches http://localhost:8001\n` +

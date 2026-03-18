@@ -32,7 +32,12 @@ def read_root():
     return {"message": "Autism Screening API is running"}
 
 @app.post("/predict")
-async def predict(req: dict):
+def predict(req: dict):
+    # ⚡ OPTIMIZATION: Removed `async` from this endpoint.
+    # Since `model.predict()` is a synchronous, CPU-bound operation, using `async def`
+    # would block the single-threaded event loop, preventing FastAPI from handling
+    # other concurrent requests. By using a standard `def`, FastAPI automatically
+    # runs this function in an external threadpool, preserving high concurrency.
     try:
         # The frontend sends { features: { ... } }
         data = req.get("features", {})
