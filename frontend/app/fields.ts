@@ -397,20 +397,6 @@ export const FIELDS = [
         ]
     },
     {
-        "id": "q_32_struggles_to_follow_conversations_in_group_settings",
-        "question": "Struggles to follow conversations in group settings",
-        "type": "select",
-        "col": 32,
-        "hint": "1–Never, 2–Rarely, 3–Sometimes, 4–Often, 5–Always",
-        "options": [
-            { "value": "1", "label": "1 — Never" },
-            { "value": "2", "label": "2 — Rarely" },
-            { "value": "3", "label": "3 — Sometimes" },
-            { "value": "4", "label": "4 — Often" },
-            { "value": "5", "label": "5 — Always" }
-        ]
-    },
-    {
         "id": "q_33_sensitive_to_loud_noises_and_or_bright_lights_or_visual_clutter",
         "question": "Sensitive to loud noises and/or bright lights or visual clutter",
         "type": "select",
