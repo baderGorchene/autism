@@ -34,7 +34,7 @@ export default function RootLayout({
           <nav style={{ padding: "1.25rem 2rem", background: "var(--panel)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text)", fontWeight: 700, fontSize: "1.25rem" }}>
               <Image src="/Final_SheSignals_Logo.png" alt="SheSignals Logo" width={32} height={32} style={{ borderRadius: "4px" }} />
-              <span style={{ color: "#fe70d7" }}>She Signals</span>
+              <span style={{ color: "#fe70d7" }}>SheSignals</span>
             </Link>
 
             <div className="nav-links" style={{ display: "flex", gap: "2rem", alignItems: "center", fontSize: "0.9rem", fontWeight: 500 }}>
