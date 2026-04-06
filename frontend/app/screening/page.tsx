@@ -86,28 +86,46 @@ export default function Home() {
   return (
     <div className="wrap">
       <header style={{ border: "none", background: "transparent", padding: 0 }}>
-        <h2 style={{ textAlign: "center", marginBottom: "1.5rem", color: "#ffffff" }}>
+        <h2 style={{ textAlign: "center", marginBottom: "1.5rem", color: "var(--text, #ffffff)" }}>
           Fill out the screening form below to request a prediction from our technology
         </h2>
       </header>
 
       <div style={{
-        background: "rgba(255, 255, 255, 0.03)",
+        background: "var(--panel, rgba(255, 255, 255, 0.03))",
         padding: "2rem",
         borderRadius: "16px",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
+        border: "1px solid var(--border, rgba(255, 255, 255, 0.1))",
         position: "relative",
         overflow: "hidden",
         marginBottom: "2rem",
-        color: "#ffffff"
+        color: "var(--text, #ffffff)"
       }}>
         <div style={{ position: "absolute", top: "-4rem", right: "-4rem", width: "16rem", height: "16rem", background: "rgba(254, 112, 215, 0.15)", filter: "blur(60px)", borderRadius: "50%", zIndex: 0 }}></div>
-        <h3 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem", color: "#fe70d7", position: "relative", zIndex: 10 }}>Our Technology & Medical Disclaimer</h3>
-        <p style={{ lineHeight: 1.6, position: "relative", zIndex: 10, fontSize: "0.95rem" }}>
-          SheSignals uses an optimized <strong style={{ color: "#fe70d7" }}>XGBoost</strong> model to analyze structured responses from parents, guardians, and educators across 36 behavioral and developmental indicators. The model is enhanced with <strong style={{ color: "#fe70d7" }}>domain-level feature engineering</strong> — computing composite scores across social, sensory, emotional, communication, masking, and routine behaviors — bringing the total to 46 analytical dimensions. Trained with <strong style={{ color: "#fe70d7" }}>Bayesian hyperparameter optimization</strong> and a clinically tuned decision threshold, the system maximises recall to minimise missed cases.
+        <h3 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem", color: "#fe70d7", position: "relative", zIndex: 10 }}>Medical Disclaimer & Tool Guide</h3>
+        <p style={{ lineHeight: 1.6, position: "relative", zIndex: 10, fontSize: "0.95rem", marginBottom: "1.5rem" }}>
+          This screening tool is designed to support early awareness and professional follow-up. <strong>It does not replace clinical diagnosis.</strong>
           <br /><br />
-          The result is a confidence-based recommendation that helps families determine whether seeking a specialist evaluation may be beneficial. <strong style={{ color: "#fe70d7" }}>The technology is designed to support early awareness and professional follow-up, not replace clinical diagnosis.</strong>
+          If you would like a detailed explanation of the fields and behaviors being screened in the form below, please refer to our comprehensive guide.
         </p>
+        <div style={{ position: "relative", zIndex: 10 }}>
+          <a href="/SheSignals_Questions_W_Explanation.pdf" target="_blank" rel="noopener noreferrer" style={{
+            display: "inline-flex",
+            alignItems: "center",
+            padding: "0.75rem 1.5rem",
+            background: "#fe70d7",
+            color: "#ffffff",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            textDecoration: "none",
+            boxShadow: "0 4px 12px rgba(254, 112, 215, 0.2)"
+          }}>
+            <svg style={{ width: "1.25rem", height: "1.25rem", marginRight: "0.5rem" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Fields Explanation Guide (PDF)
+          </a>
+        </div>
       </div>
 
       <form id="intakeForm" onSubmit={handleSubmit}>

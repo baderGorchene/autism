@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="frontend/public/center_logo.png" width="250" alt="SheSignals Logo" />
+</p>
+
 # SheSignals Autism Screening Application
 
 SheSignals provides a clinical decision support tool for the early detection of autism in girls. It utilizes a layered, web-based questionnaire (36 behavioral and developmental questions) whose responses are run through an optimized machine learning inference pipeline designed specifically to combat the subtlety and camouflage-effects often present in early female presentations of autism.
